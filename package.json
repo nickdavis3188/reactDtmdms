@@ -70,8 +70,8 @@
     "sass": "^1.43.5"
   },
   "engines": {
-    "node": ">=10",
-    "npm": ">=6"
+    "node": "16.13.1",
+    "npm": "8.3.0"
   },
   "proxy":"https://dtmdms1.herokuapp.com"
 }
