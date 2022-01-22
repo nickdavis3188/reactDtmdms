@@ -3,6 +3,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 // import { useHistory } from 'react-router-dom'
 import {
   CContainer,
@@ -25,7 +26,7 @@ import {FaChurch} from "react-icons/fa"
 const AppHeader = ({User}) => {
   const dispatch = useDispatch()
   const sidebarShow = useSelector((state) => state.sidebarShow)
-
+const history = useHistory()
   return (
     <CHeader position="sticky" className="mb-4">
       <CContainer fluid>
@@ -49,7 +50,7 @@ const AppHeader = ({User}) => {
             <CNavLink href="#">Users</CNavLink>
           </CNavItem> */}
           <CNavItem>
-            <CNavLink href="/Journeysettings">Settings</CNavLink>
+            <CNavLink onClick={() => history.push('/Journeysettings')}>Settings</CNavLink>
           </CNavItem>
         </CHeaderNav>
         <CHeaderNav>

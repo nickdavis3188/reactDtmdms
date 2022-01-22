@@ -9,14 +9,14 @@ import {
   CCol,
   CContainer,
   CForm,
-  // CInput,
+  CFormInput,
   CInputGroup,
   CInputGroupText,
   CRow,
-  // CToaster,
-  // CToast
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
+import { cilLockLocked, cilUser } from '@coreui/icons'
+
 import baseUrl from '../../../config/config'
 // import axios from 'axios';
 import {
@@ -118,34 +118,36 @@ const Login = () => {
 
   // <Toster body={resValue.resBody}/>
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+  // <div style={{display:'flex',justifyContent:'center',alignContent:'center'}}>
+	<div className="d-flex justify-content-center align-items-center" style={{width:"100vw",height:"100vh",alignItem:"center"}}>
       <CContainer>
         <CRow className="justify-content-center">
-          <CCol md="8">
+          <CCol md={8}>
             <CCardGroup>
               <CCard className="p-4">
                 <CCardBody>
                   <CForm>
                     <h1>Login</h1>
-                    <p className="text-muted">Sign In to your account</p>
+                    <p className="text-medium-emphasis">Sign In to your account</p>
                     <CInputGroup className="mb-3">
                       <CInputGroupText>
-                        <CIcon name="cil-user" />
+                        <CIcon icon={cilUser} />
                       </CInputGroupText>
-
-                      <input
+               
+					    <input
                         type="email"
                         className="form-control"
                         id="inlineFormInputGroupUsername1"
                         placeholder="Email"
                         onChange={(e) => setLoinValue({ ...loginValue, email: e.target.value })}
                       />
+					  					  
                     </CInputGroup>
                     <CInputGroup className="mb-4">
                       <CInputGroupText>
-                        <CIcon name="cil-lock-locked" />
+                        <CIcon icon={cilLockLocked} />
                       </CInputGroupText>
-
+					  
                       <input
                         type="password"
                         className="form-control"
@@ -153,22 +155,22 @@ const Login = () => {
                         placeholder="Password"
                         onChange={(e) => setLoinValue({ ...loginValue, password: e.target.value })}
                       />
+					  
                     </CInputGroup>
                     <CRow>
-                      <CCol xs="6">
+                      <CCol xs={6}>
                         <button className="btn btn-primary px-4" onClick={(e) => loginApp(e)}>
                           Login
                         </button>
                       </CCol>
-                      <CCol xs="6" className="text-right">
+                      <CCol xs={6} className="text-right">
                         <a href="/forgotP">Forgot password?</a>
-                        {/* <CButton color="link" className="px-0"></CButton> */}
                       </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5 ">
+              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>
@@ -177,12 +179,12 @@ const Login = () => {
                       here please kindly click the register button
                     </p>
                     <Link to="/signup">
-                      <CButton color="primary" className="mt-3" active tabIndex={-1}>
+                       <CButton color="primary" className="mt-3" active tabIndex={-1}>
                         Register Now!
                       </CButton>
                     </Link>
                   </div>
-                  {actionFromRes}
+				   {actionFromRes}
                   <ToastContainer />
                 </CCardBody>
               </CCard>
@@ -190,7 +192,8 @@ const Login = () => {
           </CCol>
         </CRow>
       </CContainer>
-    </div>
+	</div>
+// </div>
   )
 }
 

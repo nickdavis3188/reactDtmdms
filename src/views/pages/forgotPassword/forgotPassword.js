@@ -57,9 +57,10 @@ const Login = () => {
         }
       })
   }
-
+// <div className="c-app c-default-layout flex-row align-items-center">
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+   <div className="d-flex justify-content-center align-items-center" style={{width:"100vw",height:"100vh",alignItem:"center"}}>
+	
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md="8">
@@ -80,7 +81,7 @@ const Login = () => {
                         placeholder="Enter Email..."
                         onChange={(e) => setemail(e.target.value)}
                       />
-                      <CFormText className="help-block">Please enter member Email</CFormText>
+                      <CFormText className="help-block">Please enter your Email</CFormText>
                     </CCol>
                   </CInputGroup>
                 </CForm>
@@ -106,7 +107,8 @@ const Login = () => {
           </CCol>
         </CRow>
       </CContainer>
-    </div>
+   
+	</div>
   )
 }
 

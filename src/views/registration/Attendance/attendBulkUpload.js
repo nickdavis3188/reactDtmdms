@@ -121,10 +121,10 @@ const BulkUpload = () => {
           <br />
 
           <CInputGroup row>
-            <div className="custom-file">
+            <div className="form-group">
               <input
                 type="file"
-                className="custom-file-input"
+				className="form-control" 
                 id="customFile"
                 onChange={(e) => {
                   const file = e.target.files[0]
@@ -133,9 +133,6 @@ const BulkUpload = () => {
                 }}
                 ref={ref}
               />
-              <label className="custom-file-label" htmlFor="customFile">
-                Choose file
-              </label>
             </div>
           </CInputGroup>
           <br />

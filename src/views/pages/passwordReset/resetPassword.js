@@ -60,7 +60,8 @@ const Login = ({ match }) => {
 
   // <Toster body={resValue.resBody}/>
   return (
-    <div className="c-app c-default-layout flex-row align-items-center">
+ 
+	<div className="d-flex justify-content-center align-items-center" style={{width:"100vw",height:"100vh",alignItem:"center"}}>
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md="8">
@@ -109,6 +110,7 @@ const Login = ({ match }) => {
         <ToastContainer />
       </CContainer>
     </div>
+
   )
 }
 

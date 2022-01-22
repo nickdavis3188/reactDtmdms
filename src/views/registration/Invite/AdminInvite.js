@@ -5,6 +5,7 @@ import {
   CCardHeader,
   CCard,
   CCardBody,
+  CCardFooter,
   CCol,
   CForm,
   CFormLabel
@@ -63,7 +64,7 @@ const InviteAdmin = () => {
           <small> Form</small>
         </CCardHeader>
         <CCardBody>
-            <CForm className="row" onSubmit={(e)=>submitForm(e)}>
+            <CForm className="row">
                   <h1>Sub-Admin Invitation</h1>
                   <CCol md={12}>
                     <CFormLabel htmlFor="hf-username">Username</CFormLabel>
@@ -114,12 +115,15 @@ const InviteAdmin = () => {
                         onChange={(e)=>setFile(e.target.files[0])}
                     />
                   </CCol>
-                  <button type="submit" className="btn btn-secondary btn-lg btn-block">Invite</button> 
-                
+				  <br/>
+				 
               </CForm>
                
                 <ToastContainer/>
-        </CCardBody> 
+        </CCardBody>
+			<CCardFooter className="p-4">
+                <button type="submit" className="btn btn-secondary btn-lg btn-block" onClick={(e)=>submitForm(e)}>Invite</button> 
+              </CCardFooter>
       </CCard>
     </div>
   )
