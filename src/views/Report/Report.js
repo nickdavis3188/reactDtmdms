@@ -44,8 +44,6 @@ const Report = () => {
     { title: 'JourneyName', field: 'JourneyName' },
     { title: 'JourneyStatus', field: 'Status' },
     { title: 'AttendDate', field: 'AttendDate' },
-    { title: 'Initiator', field: 'Initiator' },
-    { title: 'InitiatorRole', field: 'InitiatorRole' },
   ]
 
   const formatDate2 = (date) => {
@@ -62,9 +60,9 @@ const Report = () => {
 
   const getMyReport = async (n) => {
     if (myDate === '' && selectJourney == 0) {
-      return toast('Journey and Date not selected')
+      return toast('Journey and Year not selected')
     } else if (selectJourney !== 0 && myDate === '') {
-      return toast('Date not selected')
+      return toast('Year not selected')
     } else if (myDate !== '' && selectJourney === 0) {
       return toast('Journey not selected')
     } else {
@@ -93,8 +91,6 @@ const Report = () => {
                 JourneyName: ee.JourneyId.JourneyName,
                 Status: ee.Status,
                 AttendDate: formatDate2(ee.JourneyDate),
-                Initiator: ee.AdminId.fullName,
-                InitiatorRole: ee.AdminId.role,
               }),
             )
             // console.log('aarr',aarr)
@@ -148,8 +144,11 @@ const Report = () => {
           <div className="form-outline">
             <input
               id="search-focus"
-              type="date"
+              type="number"
+			  min="2013"
+			  max="2100"
               className="form-control"
+			   placeholder="YYYY"
               onChange={(e) => setMyDate(e.target.value)}
             />
           </div>
@@ -165,7 +164,7 @@ const Report = () => {
         data={reportData2}
         options={{
           sorting: true,
-          exportButton: true,
+          exportButton: true
         }}
       />
       <ToastContainer />

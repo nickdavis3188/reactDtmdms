@@ -10,15 +10,11 @@ import {
   CCardBody,
   CCardHeader,
   CInputGroup,
-  CModal,
-  CModalBody,
-  CModalFooter,
-  CModalHeader,
-  CModalTitle,
   CButton,
   CAlert,
 } from '@coreui/react'
 import Dropdown from 'react-bootstrap/Dropdown'
+
 import DropdownButton from 'react-bootstrap/DropdownButton'
 // import CIcon from '@coreui/icons-react';
 import { FaSearch } from 'react-icons/fa'
@@ -299,10 +295,8 @@ const JourneyHistry = (props) => {
 }
 
 const JourneyAttendance = (props) => {
-  const [modal, setModal] = useState(false)
-  // const [visible, setVisible] = React.useState(0)
-	const [visible, setVisible] = useState(true)
-// const [visible, setVisible] = useState(false)
+	const [visible2, setVisible2] = useState(false)
+	const [chekDate, setChekDate] = useState(false)
 
 
 
@@ -333,77 +327,43 @@ const JourneyAttendance = (props) => {
     }
   }
 
-  const CheckDate = async (e) => {
-    let res = await fetch(`${baseUrl}/api/v1/journeyDate/checkJourneyDate`, {
-      method: 'GET',
-    })
+	useEffect(() => {
+		async function loadData1() {
+			let res = await fetch(`${baseUrl}/api/v1/journeyDate/checkJourneyDate`, {
+			  method: 'GET',
+			})
 
-    const data = await res.json()
+			const data = await res.json()
 
-    if (data) {
-      if (data.status === 'success') {
-        setModal(!modal)
-      } else {
-        if (data.status === 'not found') {
-		  setVisible(!visible)
-        } else {
-          if (data.status === 'fail') {
-            return toast(data.message ? data.message : '')
-          }
-        }
-      }
-    }
-  }
+			if (data) {
+			  if (data.status === 'success') {
+				setChekDate(true)
+			  } else {
+				if (data.status === 'not found') {
+				  setChekDate(false)
+				} else {
+				  if (data.status === 'fail') {
+					return toast(data.message ? data.message : '')
+				  }
+				}
+			  }
+			}
+		}
+		
+		loadData1()
+	},[])
 
-  const btnAtt =
-    props.currentJourney.JourneyPriority === 6 ? (
-      <button className=" btn btn-primary disabled" disabled>
-        You are done with your journey
-      </button>
-    ) : (
-      <button className="btn btn-primary" onClick={(e) => CheckDate(e)}>
-        Attend
-      </button>
-    )
+
+	const alerDate = visible2 == true ? (<div className="alert alert-warning" role="alert">Journey Date Not Set...</div>) : ""
+	const timeOut = setTimeout(function(){return setVisible2(false)},3000)
+	 const attendbtn = chekDate == true ? <button className="btn btn-primary" onClick={(e) => Attendance22(e)}>Attend</button> : <button className="btn btn-primary" onClick={(e) => setVisible2(true)}>Attend</button>
 
   return (
     <div>
-		<CModal visible={modal} onClose={() =>setModal(false)}>
-		  <CModalHeader onClose={() =>setModal(false)}>
-			<CModalTitle>Journey Warning</CModalTitle>
-		  </CModalHeader>
-		  <CModalBody>Are you sure you have attended {props.currentJourney.JourneyName}?</CModalBody>
-		  <CModalFooter>
-			<CButton color="secondary" onClick={() => setModal(false)}>
-			  Close
-			</CButton>
-			<button
-            className="btn btn-primary"
-            onClick={(e) => {
-              setModal(false)
-              return Attendance22(e)
-            }}
-          >
-		   Proceed...
-          </button>{' '}
-		  </CModalFooter>
-		</CModal>
+		{alerDate}
+		{timeOut}
 	
-    {
-    visible?(
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">
-      Journey Date Not Set...
-      <button type="button" className="close" data-dismiss="alert" aria-label="Close" onClose={() => setVisible(false)}>
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-    ):
-    ""
-    }
-    <div className="alert alert-warning" role="alert">
-      A simple warning alert with an example link. Give it a click if you like.
-    </div>
-      <div>
+     <div>
         <div>
           <table className="table table-hover">
             <thead>
@@ -423,7 +383,15 @@ const JourneyAttendance = (props) => {
 
         <br />
         <CInputGroup row>
-          <CCol md="6">{btnAtt}</CCol>
+          <CCol md="6">{
+			   props.currentJourney.JourneyPriority === 6 ? (
+			  <button className=" btn btn-primary disabled" disabled>
+				You are done with your journey
+			  </button>
+			) : (
+			 attendbtn
+			)
+		  }</CCol>
         </CInputGroup>
       </div>
     </div>
@@ -431,10 +399,12 @@ const JourneyAttendance = (props) => {
 }
 
 const JourneyAttendance2 = (props) => {
-  const [modal, setModal] = useState(false)
-  const [visible, setVisible] = React.useState(false)
+  // const [modal, setModal] = useState(false)
+  const [visible2, setVisible2] = useState(false)
   const [myCode, setCode] = useState()
   const [myJCode, setJCode] = useState()
+  const [chekDate, setChekDate] = useState(false)
+  // const [show, setShow] = useState(false);
   const Attendance22 = async (e) => {
     let dateAttend = JSON.stringify({ id: props.id, addId: props.admin._id })
     let res = await fetch(`${baseUrl}/api/v1/member/journeyAttendSecond`, {
@@ -462,28 +432,34 @@ const JourneyAttendance2 = (props) => {
     }
   }
 
-  const CheckDate = async (e) => {
-    let res = await fetch(`${baseUrl}/api/v1/journeyDate/checkJourneyDate`, {
-      method: 'GET',
-    })
+	useEffect(() => {
+		async function loadData1() {
+			let res = await fetch(`${baseUrl}/api/v1/journeyDate/checkJourneyDate`, {
+			  method: 'GET',
+			})
 
-    const data = await res.json()
+			const data = await res.json()
 
-    if (data) {
-      if (data.status === 'success') {
-        setModal(!modal)
-      } else {
-        if (data.status === 'not found') {
-          setVisible(10)
-        } else {
-          if (data.status === 'fail') {
-            return toast(data.message ? data.message : '')
-          }
-        }
-      }
-    }
-  }
-
+			if (data) {
+			  if (data.status === 'success') {
+				setChekDate(true)
+			  } else {
+				if (data.status === 'not found') {
+				  setChekDate(false)
+				} else {
+				  if (data.status === 'fail') {
+					return toast(data.message ? data.message : '')
+				  }
+				}
+			  }
+			}
+		}
+		
+		loadData1()
+	},[])
+  
+	
+	
   const selectJourney = async (n) => {
     n.preventDefault()
     if (typeof myJCode == 'number') {
@@ -542,46 +518,18 @@ const JourneyAttendance2 = (props) => {
     loadData()
   }, [])
 
-  const notice =
-    myCode == 3 ? 'Last attendance 3 Months ago...' : 'Last attendance 6 Months ago or above...'
+ 
+	const alerDate = visible2 == true ? (<div className="alert alert-warning" role="alert">Journey Date Not Set...</div>) : ""
+	const timeOut = setTimeout(function(){return setVisible2(false)},3000)
+	  const attendbtn = chekDate == true ? <button className="btn btn-primary" onClick={(e) => Attendance22(e)}>Attend</button> : <button className="btn btn-primary" onClick={(e) => setVisible2(true)}>Attend</button>
   return (
     <div>
-      <div className="alert alert-warning alert-dismissible fade show" role="alert">
-        <button type="button" className="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-        <strong>
-          <span>
-            <strong>Note:{notice}</strong>{' '}
-          </span>
-        </strong>
-      </div>
 	
-	  <CModal visible={modal} onClose={() =>setModal(false)}>
-		  <CModalHeader onClose={() =>setModal(false)}>
-			<CModalTitle>Journey Warning</CModalTitle>
-		  </CModalHeader>
-		  <CModalBody>Are you sure you have attended {props.SincurrentJourney.JourneyName}?</CModalBody>
-		  <CModalFooter>
-			<CButton color="secondary" onClick={() => setModal(false)}>
-			  Close
-			</CButton>
-			<button
-            className="btn btn-primary"
-            onClick={(e) => {
-              setModal(false)
-              return Attendance22(e)
-            }}
-          >
-		   Proceed...
-          </button>{' '}
-		  </CModalFooter>
-		</CModal>
-
-     
-	  
-      <CAlert color="primary" dismissible visible={visible} onClose={() => setVisible(false)}>Journey Date Not Set...</CAlert>
-	  
+		<div className="alert alert-warning" role="alert">{myCode == 3 ? 'Last attendance 3 Months ago...' : 'Last attendance 6 Months ago or above...'}</div>
+		
+		 {alerDate}
+		 {timeOut}
+		
       <div>
         <div>
           <table className="table table-hover">
@@ -635,9 +583,7 @@ const JourneyAttendance2 = (props) => {
                 </button>
               </div>
             ) : (
-              <button className="btn btn-primary" onClick={(e) => CheckDate(e)}>
-                Attend
-              </button>
+			attendbtn
             )}
           </CCol>
         </CInputGroup>

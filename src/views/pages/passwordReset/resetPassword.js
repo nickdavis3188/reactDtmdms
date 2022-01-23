@@ -49,7 +49,8 @@ const Login = ({ match }) => {
     const data = await resetDa.json()
     if (data.status === 'success') {
       toast('Password Reset Successful')
-      history.push('/login')
+	  setTimeout(()=> history.push('/login'),3000)
+     
     } else {
       if (data.status === 'fail') {
         return toast(data.message ? data.message : '')
@@ -102,12 +103,14 @@ const Login = ({ match }) => {
                       </button>
                     </CCol>
                   </CRow>
+				  
                 </CForm>
+				 <ToastContainer />
               </CCardBody>
             </CCard>
           </CCol>
         </CRow>
-        <ToastContainer />
+       
       </CContainer>
     </div>
 

@@ -16,11 +16,14 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-
+import { useHistory } from 'react-router-dom'
 // import CIcon from '@coreui/icons-react'
 // import axios from 'axios';
 import baseUrl from '../../../config/config'
-import { Redirect, Switch } from 'react-router-dom'
+import {
+  Redirect,
+  Switch
+} from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import {FaMale} from "react-icons/fa"
@@ -31,11 +34,8 @@ const Register = () => {
   const [inputPassword, setPassword] = useState(null)
   const [inputPasswordConfirm, setPasswordConfirm] = useState(null)
   const [file, setFile] = useState(null)
-
-  const [resValues, setResValues] = useState({
-    status: '',
-    body: '',
-  })
+	const history = useHistory()
+  const [resValues, setResValues] = useState('')
 
   formdata.append('fullName', inputUserName)
   formdata.append('email', inputEmail)
@@ -43,54 +43,41 @@ const Register = () => {
   formdata.append('passwordConfirm', inputPasswordConfirm)
   formdata.append('adminImg', file)
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault()
-    fetch(`${baseUrl}/api/v1/auth/signup`, {
+   const regreq = await fetch(`${baseUrl}/api/v1/auth/signup`, {
       method: 'POST',
       body: formdata,
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data) {
-          if (data.status === 'success') {
-            setResValues({ status: data.status, body: 'Registration successfull' })
-            return toast('Registration successful')
-          } else {
-            if (data.message) {
-              return toast(data.message)
-            } else {
-              if (data.data.message) {
-                return toast(data.data.message)
-              }
-            }
-          }
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err)
-          alert(err)
-        }
-      })
-  }
-  const resCheack =
-    resValues.status === 'success' ? (
-      <Switch>
-        <Redirect from="/signup" to="/login" />
-      </Switch>
-    ) : (
-      ''
-    )
-  //{/* */}
-  return (
+	const data = await regreq.json()
+	if (data) {
+	  if (data.status === 'success') {
+		return toast('Registration successful')
+		setResValues(data.status)	
+	  } else {
+		if (data.message) {
+		  return toast(data.message)
+		} else {
+		  if (data.data.message) {
+			return toast(data.data.message)
+		  }
+		}
+	  }
+	}
  
-      <div className="bg-light min-vh-100 d-flex flex-row align-items-center">
+  }
+	const resCheack = resValues == 'success' ?<Switch><Redirect from='/signup' to='/login'/></Switch>:''
+ 	
+  return (
+		<div>
+	
+      <div className="bg-light min-vh-100 d-flex flex-row align-items-center">	  
       <CContainer>
         <CRow className="justify-content-center">
           <CCol md={9} lg={7} xl={6}>
             <CCard className="mx-4">
               <CCardBody className="p-4">
-                <CForm>
+                <CForm onSubmit={(e)=>submitForm(e)}>
                   <h1>Register</h1>
                   <p className="text-medium-emphasis">Create your account</p>
                   <CInputGroup className="mb-3">
@@ -151,10 +138,9 @@ const Register = () => {
                       />
                   </CInputGroup>
                   <div className="d-grid">
-                     <button type="submit" className="btn btn-secondary btn-lg btn-block">
+                     <button type="submit" className="btn btn-secondary btn-lg btn-block" >
                     Submit
                   </button>
-                  {resCheack}
                   </div>
                 </CForm>
 				 <ToastContainer />
@@ -164,12 +150,13 @@ const Register = () => {
                   If you have an account <a href="/login">SingIn</a>
                 </p>
               </CCardFooter>
+			  {resCheack}
             </CCard>
           </CCol>
         </CRow>
       </CContainer>
     </div>
-
+	</div>
   )
 }
 

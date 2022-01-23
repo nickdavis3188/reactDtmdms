@@ -15,7 +15,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import baseUrl from '../../../config/config'
-
+import { useHistory } from 'react-router-dom'
 //
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -23,39 +23,33 @@ import 'react-toastify/dist/ReactToastify.css'
 
 const Login = () => {
   const [email, setemail] = useState('')
-
+  // host: `${window.location.host}/resetPassword`,
+  const history = useHistory()
   let myData = JSON.stringify({
-    email: email,
-    host: `${window.location.host}/resetPassword`,
+    email: email
   })
 
-  const sendEmail = (e) => {
+  const sendEmail = async(e) => {
     e.preventDefault()
-    fetch(`${baseUrl}/api/v1/auth/forgotPassword`, {
+    const emailReq = await fetch(`${baseUrl}/api/v1/auth/forgotPassword`, {
       method: 'POST',
       body: myData,
       headers: {
         'Content-Type': 'application/json',
       },
     })
-      .then((res) => res.json())
-      .then((data) => {
-        if (data.status === 'success') {
-          toast(data.message ? data.message : '')
-        } else {
-          if (data) {
-            if (data.status === 'fail') {
-              return toast(data.message ? data.message : '')
-            }
-          }
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err)
-          alert(err)
-        }
-      })
+	const data = await emailReq.json()
+	 if (data.status === 'success') {
+		 toast('User Exist')
+		 setTimeout(()=> history.push(`/resetPassword/${data.data._id}`),3000)		 
+	} else {
+	  if (data) {
+		if (data.status === 'notFound') {
+			
+		  return toast(data.message ? data.message : '')
+		}
+	  }
+	}
   }
 // <div className="c-app c-default-layout flex-row align-items-center">
   return (

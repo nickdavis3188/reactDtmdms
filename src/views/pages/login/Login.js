@@ -16,7 +16,7 @@ import {
 } from '@coreui/react'
 import CIcon from '@coreui/icons-react'
 import { cilLockLocked, cilUser } from '@coreui/icons'
-
+// import { useHistory } from 'react-router-dom'
 import baseUrl from '../../../config/config'
 // import axios from 'axios';
 import {
@@ -37,7 +37,7 @@ const Login = () => {
     status: '',
     resBody: '',
   })
-
+ // const history = useHistory()
   useEffect(() => {
     async function loadfun() {
       let token = JSON.parse(localStorage.getItem('Token'))
@@ -164,13 +164,13 @@ const Login = () => {
                         </button>
                       </CCol>
                       <CCol xs={6} className="text-right">
-                        <a href="/forgotP">Forgot password?</a>
+                        <a href="/forgotP" onClick>Forgot password?</a>
                       </CCol>
                     </CRow>
                   </CForm>
                 </CCardBody>
               </CCard>
-              <CCard className="text-white bg-primary py-5" style={{ width: '44%' }}>
+              <CCard className="text-white bg-primary py-5" style={{ width: '100%' }}>
                 <CCardBody className="text-center">
                   <div>
                     <h2>Sign up</h2>

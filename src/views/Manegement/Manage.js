@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import Dropdown from 'react-bootstrap/Dropdown'
 import DropdownButton from 'react-bootstrap/DropdownButton'
+import {ImUsers} from "react-icons/im";
 
 const Manage = ({ User }) => {
   const history = useHistory()
@@ -145,10 +146,8 @@ const Manage = ({ User }) => {
         <table className="table table-hover table-outline ">
           <thead className="thead-light">
             <tr>
-              <th className="text-center">
-                <CIcon name="cil-people" />
-              </th>
-              <th className="text-center">User</th>
+			  <th scope="col"> <ImUsers/> </th>
+              <th className="text-center">Info</th>
               <th className="text-center">Name</th>
               <th className="text-center">Email</th>
               <th className="text-center">Role</th>
@@ -159,11 +158,8 @@ const Manage = ({ User }) => {
             {result1.map((e, i) => {
               return (
                 <tr key={i}>
-                  <td className="text-center">
-                    <div className="c-avatar">
-                      <img src={e.photoUrl} className="rounded-circle" width="80" alt="admin" />
-                      <span className="c-avatar-status bg-success"></span>
-                    </div>
+                  <td scope="row">
+                    <div className="d-flex align-items-center"><img alt='avater' className="rounded-circle" src={e.ImageUrl} width="30"/></div>
                   </td>
 
                   <td>

@@ -74,19 +74,19 @@ const Settings = (props) => {
   }, [])
 
   let journey22 = journeys.filter((e) => e.JourneyPriority !== 6)
-  const setJourneyDate = (e) => {
-    let dateAttend = JSON.stringify({ journeyDate: dateValue })
-    fetch(`${baseUrl}/api/v1/journeyDate/journeyDate`, {
-      method: 'POST',
-      body: dateAttend,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        console.log(data)
-        if (data) {
+  
+  const setJourneyDate = async (e) => {
+		let dateAttend = JSON.stringify({ journeyDate: dateValue })
+		
+		const jDateReq = await fetch(`${baseUrl}/api/v1/journeyDate/journeyDate`, {
+		  method: 'POST',
+		  body: dateAttend,
+		  headers: {
+			'Content-Type': 'application/json',
+		  },
+		})
+		const data = await jDateReq.json()
+		if (data) {
           if (data.status === 'success') {
             setDateValue('')
             return toast(data.message ? data.message : '')
@@ -99,18 +99,12 @@ const Settings = (props) => {
               }
             }
           }
-        }
-      })
-      .catch((err) => {
-        if (err) {
-          console.log(err)
-          alert(err)
-        }
-      })
+		}
+   
   }
 
   let dateBtn =
-    dateChekValue === 'success' ? (
+    dateChekValue == 'success' ? (
       <button className=" btn btn-primary disabled" disabled>
         journey Date Is Already Set
       </button>
