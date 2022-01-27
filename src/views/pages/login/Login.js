@@ -115,6 +115,12 @@ const Login = () => {
     ) : (
       ''
     )
+	
+	// <Link to="/signup">
+                       // <CButton color="primary" className="mt-3" active tabIndex={-1}>
+                        // Register Now!
+                      // </CButton>
+                    // </Link>
 
   // <Toster body={resValue.resBody}/>
   return (
@@ -173,16 +179,12 @@ const Login = () => {
               <CCard className="text-white bg-primary py-5" style={{ width: '100%' }}>
                 <CCardBody className="text-center">
                   <div>
-                    <h2>Sign up</h2>
+             
                     <p>
                       Hello, welcome to Kings Assembly Members Management System, if you are new
                       here please kindly click the register button
                     </p>
-                    <Link to="/signup">
-                       <CButton color="primary" className="mt-3" active tabIndex={-1}>
-                        Register Now!
-                      </CButton>
-                    </Link>
+                    
                   </div>
 				   {actionFromRes}
                   <ToastContainer />
