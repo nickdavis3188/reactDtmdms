@@ -177,12 +177,12 @@ const Login = () => {
                 </CCardBody>
               </CCard>
               <CCard className="text-white bg-primary py-5" style={{ width: '100%' }}>
-                <CCardBody className="text-center">
-                  <div className="d-flex justify-content-center align-items-center" style={{width:"100vw",height:"100vh",alignItem:"center"}}>
+                <CCardBody className="text-center" style={{display:'flex',alignItem:"center"}}>
+                  <div >
              
                     <p>
                       Hello, welcome to Kings Assembly Members Management System, if you are new
-                      here please kindly click the register button
+                      here please kindly fill in your login details to proceed...
                     </p>
                     
                   </div>
