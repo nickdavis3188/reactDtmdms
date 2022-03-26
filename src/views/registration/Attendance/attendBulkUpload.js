@@ -8,17 +8,26 @@ import * as XLSX from 'xlsx'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { FaFileUpload } from 'react-icons/fa'
+
+import Dropdown from 'react-bootstrap/Dropdown'
+import DropdownButton from 'react-bootstrap/DropdownButton'
+
 const BulkUpload = () => {
   const [fileValues, setFileValue] = useState({ filee: '' })
   const ref = useRef()
+  const [selectJourney, setSelectJourney] = useState(0)
   const [datas, setDatas] = useState([])
-  // const [failData,setfailData]  = useState([])
+  const [newMembers,setNewMember]  = useState([])
+  const [prev,setPrev] = useState(0)
+  const [notRegisterd2,setNotRegisterd] = useState([])
   const formData = new FormData()
 
   const preview = (file) => {
-    const promies = new Promise((resolve, reject) => {
+	  
+		const promies = new Promise((resolve, reject) => {
       const fileReader = new FileReader()
       fileReader.readAsArrayBuffer(file)
+	  
 
       fileReader.onload = (e) => {
         const myFile = e.target.result
@@ -48,29 +57,46 @@ const BulkUpload = () => {
 
   const sendFile = async (e) => {
     e.preventDefault()
-    if (fileValues.filee === '') {
-      return toast('File Not Selected...')
-    }
-    let sendData = JSON.stringify(datas)
+	if (selectJourney == 0) {
+      return toast('Journey not selected')
+	}else{
+		if (fileValues.filee === '') {
+		  return toast('File Not Selected...')
+		}else{
+			console.log('selectJourney',selectJourney)
+			let sendData = JSON.stringify({data:datas,JourneyPriority:selectJourney})
 
-    let token = JSON.parse(localStorage.getItem('Token'))
+			let token = JSON.parse(localStorage.getItem('Token'))
 
-    const reponesUP = await fetch(`${baseUrl}/api/v1/member/attendUpload`, {
-      method: 'POST',
-      body: sendData,
-      headers: {
-        'Content-Type': 'application/json',
-        authorization: `Bearer ${token}`,
-      },
-    })
-    const resData = await reponesUP.json()
-    if (resData) {
-      if (resData.status === 'success') {
-        return toast('Upload successful')
-      } else {
-        return toast(resData.message ? resData.message : '')
-      }
-    }
+			const reponesUP = await fetch(`${baseUrl}/api/v1/member/bulkAttendance`, {
+			  method: 'POST',
+			  body: sendData,
+			  headers: {
+				'Content-Type': 'application/json',
+				authorization: `Bearer ${token}`,
+			  },
+			})
+			const resData = await reponesUP.json()
+			if (resData) {
+			  if (resData.status === 'success') {
+				
+				 if(resData.newMember != undefined){
+					 setNewMember(resData.newMember.length >= 1?resData.newMember:'')
+				 }else if(resData.notRegisterd != undefined){
+					 setNotRegisterd(resData.notRegisterd.length >= 1?resData.notRegisterd:'')
+				 }else{
+					 console.log('undefined')
+				 }
+		
+				return toast('Upload successful')
+			  } else {
+				return toast(resData.message ? resData.message : '')
+			  }
+			}
+		}
+		
+	}
+    
   }
   
 
@@ -100,9 +126,10 @@ const BulkUpload = () => {
       seconds,
     )
   }
-
+	
   return (
     <>
+		
       <CCard>
         <CCardHeader>
           <h5>Make your Attendance bulk upload here</h5>
@@ -119,7 +146,120 @@ const BulkUpload = () => {
             </strong>
           </div>
           <br />
-
+		
+		  {
+			newMembers.length >= 1
+			
+			?
+				<div className="alert alert-warning alert-dismissible fade show" role="alert">
+				 <CCard>
+					<CCardHeader>
+					<p>Feedback: Note the RegNumber did not attend the previous journey</p>
+					</CCardHeader>
+					<CCardBody>
+					 <div style={{ overflowX: 'auto' }} className="table-responsive-xl">
+						<table className="table table-hover">
+						  <thead>
+							<tr>
+							  <th scope="col">RegNumber</th>
+							  <th scope="col">Firstname</th>
+							  <th scope="col">Surname</th>
+							  <th scope="col">Email</th>
+							
+							</tr>
+						  </thead>
+						  <tbody>
+							{newMembers.map((e, i) => {
+							  return (
+								<tr key={i}>
+								  <td>{e.RegNumber}</td>
+								  <td>{e.Firstname}</td>
+								  <td>{e.Surname}</td>
+								  <td>{e.Email}</td>
+								  
+								</tr>
+							  )
+							})}
+						  </tbody>
+						</table>
+					  </div>
+				  </CCardBody>
+				 </CCard>
+			 </div>
+			:
+			""
+		}
+		  
+		   {
+			notRegisterd2.length >= 1
+			
+			?
+				<div className="alert alert-warning alert-dismissible fade show" role="alert">
+				 <CCard>
+					<CCardHeader>
+					<p>Feedback: Note the RegNumber of The following members, there are not registerd in the app </p>
+					</CCardHeader>
+					<CCardBody>
+					 <div style={{ overflowX: 'auto' }} className="table-responsive-xl">
+						<table className="table table-hover">
+						  <thead>
+							<tr>
+							  <th scope="col">RegNumber</th>
+							  <th scope="col">Firstname</th>
+							  <th scope="col">Surname</th>
+							  <th scope="col">Email</th>
+							
+							</tr>
+						  </thead>
+						  <tbody>
+							{notRegisterd2.map((e, i) => {
+							  return (
+								<tr key={i}>
+								  <td>{e.RegNumber}</td>
+								  <td>{e.Firstname}</td>
+								  <td>{e.Surname}</td>
+								  <td>{e.Email}</td>
+								  
+								</tr>
+							  )
+							})}
+						  </tbody>
+						</table>
+					  </div>
+				  </CCardBody>
+				 </CCard>
+			 </div>
+			:
+			""
+		}
+		  
+		  <br/>
+		  <div className="input-group">
+			 <div className="form-outline">
+            <DropdownButton
+              className="text-center"
+              id="dropdown-item-button"
+              title="Journey"
+              variant="secondary"
+            >
+              <Dropdown.ItemText>TAKE ACTION</Dropdown.ItemText>
+              <Dropdown.Item as="button" onClick={() => setSelectJourney(1)}>
+                Journey 101
+              </Dropdown.Item>
+              <Dropdown.Item as="button" onClick={() => setSelectJourney(2)}>
+                Journey 201
+              </Dropdown.Item>
+              <Dropdown.Item as="button" onClick={() => setSelectJourney(3)}>
+                Journey 202
+              </Dropdown.Item>
+              <Dropdown.Item as="button" onClick={() => setSelectJourney(4)}>
+                Journey 301
+              </Dropdown.Item>
+              <Dropdown.Item as="button" onClick={() => setSelectJourney(5)}>
+                Journey 401
+              </Dropdown.Item>
+            </DropdownButton>
+          </div>
           <CInputGroup row>
             <div className="form-group">
               <input
@@ -135,29 +275,29 @@ const BulkUpload = () => {
               />
             </div>
           </CInputGroup>
+		  </div>
           <br />
           {/* //setFileValue({file:e.target.files[0]}) */}
           <div style={{ overflowX: 'auto' }} className="table-responsive-xl">
             <table className="table table-hover">
               <thead>
                 <tr>
-                  <th scope="col">MemberId</th>
-                  <th scope="col">JourneyDate</th>
-                  <th scope="col">JourneyId</th>
-                  <th scope="col">Status</th>
-                  <th scope="col">AdminId</th>
+                  <th scope="col">RegNumber</th>
+                  <th scope="col">Firstname</th>
+                  <th scope="col">Surname</th>
+                  <th scope="col">Email</th>
+                
                 </tr>
               </thead>
               <tbody>
                 {datas.map((e, i) => {
                   return (
                     <tr key={i}>
-                      <td>{e.MemberId}</td>
-                      <td>{e.JourneyDate}</td>
-                      {}
-                      <td>{e.JourneyId}</td>
-                      <td>{e.Status}</td>
-                      <td>{e.AdminId}</td>
+                      <td>{e.RegNumber}</td>
+                      <td>{e.Firstname}</td>
+                      <td>{e.Surname}</td>
+                      <td>{e.Email}</td>
+                      
                     </tr>
                   )
                 })}
@@ -182,7 +322,9 @@ const BulkUpload = () => {
           <ToastContainer />
         </CCardFooter>
       </CCard>
+	  
     </>
   )
 }
+
 export default BulkUpload

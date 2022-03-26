@@ -12,12 +12,7 @@ import Test from './views/pages/Upload'
 
 
 
-  // <Route
-              // exact
-              // path="/signup"
-              // name="Register Page"
-              // render={(props) => <Register {...props} />}
-            // />
+  
 
 const loading = (
   <div className="pt-3 text-center">
@@ -35,7 +30,12 @@ class App extends Component {
         <React.Suspense fallback={loading}>
           <Switch>
             <Route exact path="/login" name="Login Page" render={(props) => <Login {...props} />} />
-          
+			<Route
+              exact
+              path="/signup"
+              name="Register Page"
+              render={(props) => <Register {...props} />}
+            />
             <Route
               exact
               path="/forgotP"
